@@ -1,0 +1,64 @@
+{
+  "name": "Lumina Demo - Scout (synthetic feed)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "a1f0c6d2-0001-4c1e-9a10-000000000001",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 6 }] }
+      },
+      "id": "a1f0c6d2-0001-4c1e-9a10-000000000002",
+      "name": "Every 6 hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 200]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Synthetic sources. In a real deployment this node is replaced by RSS, API or scraping nodes.\nconst items = [\n  { title: 'Routing LLM calls by task cost', body: 'A multi-agent orchestration pattern sends classification to a small LLM and planning to a large one.', url: 'https://example.com/feed/llm-routing', source: 'synthetic-blog' },\n  { title: 'Exposing a knowledge base through MCP', body: 'An MCP server gives any agent the same search and write tools over the knowledge base.', url: 'https://example.com/feed/mcp-kb', source: 'synthetic-newsletter' },\n  { title: 'Weekend sourdough schedule', body: 'Feed the starter Friday night.', url: 'https://example.com/feed/sourdough', source: 'synthetic-noise' }\n];\nreturn [{ json: { items } }];"
+      },
+      "id": "a1f0c6d2-0001-4c1e-9a10-000000000003",
+      "name": "Collect sources",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/ingest",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ items: $json.items }) }}",
+        "options": { "timeout": 10000 }
+      },
+      "id": "a1f0c6d2-0001-4c1e-9a10-000000000004",
+      "name": "Triage and ingest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 100]
+    },
+    {
+      "parameters": {
+        "content": "## Scout loop\nCollect sources, then POST them to the Lumina ingest API (`lumina serve`).\nThe API scores each item against the profile, ingests idempotently and returns counts.\nChange the URL if n8n runs in Docker (see README)."
+      },
+      "id": "a1f0c6d2-0001-4c1e-9a10-000000000005",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, -200]
+    }
+  ],
+  "connections": {
+    "Run manually": { "main": [[{ "node": "Collect sources", "type": "main", "index": 0 }]] },
+    "Every 6 hours": { "main": [[{ "node": "Collect sources", "type": "main", "index": 0 }]] },
+    "Collect sources": { "main": [[{ "node": "Triage and ingest", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

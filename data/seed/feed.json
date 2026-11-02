@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Routing LLM calls by task cost",
+    "body": "A multi-agent orchestration pattern sends classification to a small LLM and planning to a large one. The agent layer never picks a model directly.",
+    "url": "https://example.com/feed/llm-routing",
+    "source": "synthetic-blog"
+  },
+  {
+    "title": "n8n as the orchestration backbone",
+    "body": "Scheduled n8n workflows collect sources, call an agent over HTTP and write results to a knowledge store. Each step is observable in the execution log.",
+    "url": "https://example.com/feed/n8n-backbone",
+    "source": "synthetic-blog"
+  },
+  {
+    "title": "Exposing a knowledge base through MCP",
+    "body": "An MCP server gives any agent the same search and write tools over the knowledge base, so context is shared instead of copied into prompts.",
+    "url": "https://example.com/feed/mcp-kb",
+    "source": "synthetic-newsletter"
+  },
+  {
+    "title": "From SAP process to agent workflow",
+    "body": "Mapping an SAP procure-to-pay process onto agent steps: each business control becomes an explicit check in the orchestration, with an LLM only where judgment is needed.",
+    "url": "https://example.com/feed/sap-to-agents",
+    "source": "synthetic-whitepaper"
+  },
+  {
+    "title": "Idempotent ingestion for a self-updating knowledge base",
+    "body": "Identity by URL, freshness by content hash. Re-running the pipeline is safe and only changed sources are rewritten.",
+    "url": "https://example.com/feed/idempotent-ingest",
+    "source": "synthetic-blog"
+  },
+  {
+    "title": "Weekend sourdough schedule",
+    "body": "Feed the starter Friday night, bulk ferment Saturday, bake Sunday morning.",
+    "url": "https://example.com/feed/sourdough",
+    "source": "synthetic-noise"
+  },
+  {
+    "title": "Choosing a trail running shoe",
+    "body": "Stack height, drop and lug depth matter more than brand.",
+    "url": "https://example.com/feed/trail-shoes",
+    "source": "synthetic-noise"
+  },
+  {
+    "title": "Agent memory that survives restarts",
+    "body": "Agents write decisions back to the knowledge base through MCP, so the next run starts from what the last one learned.",
+    "url": "https://example.com/feed/agent-memory",
+    "source": "synthetic-newsletter"
+  }
+]

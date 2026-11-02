@@ -1,0 +1,55 @@
+{
+  "name": "Lumina Demo - Scout (arXiv multi-agent RSS)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "b2e1d7e3-0002-4d2f-8b20-000000000001",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://rss.arxiv.org/rss/cs.MA",
+        "options": {}
+      },
+      "id": "b2e1d7e3-0002-4d2f-8b20-000000000002",
+      "name": "Read arXiv cs.MA",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Map RSS entries to the ingest contract: title, body, url, source.\nconst items = $input.all().slice(0, 25).map(i => ({\n  title: i.json.title || '',\n  body: i.json.contentSnippet || i.json.content || '',\n  url: i.json.link,\n  source: 'arxiv-cs.MA'\n})).filter(i => i.url);\nreturn [{ json: { items } }];"
+      },
+      "id": "b2e1d7e3-0002-4d2f-8b20-000000000003",
+      "name": "Map to ingest contract",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8787/ingest",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ items: $json.items }) }}",
+        "options": { "timeout": 10000 }
+      },
+      "id": "b2e1d7e3-0002-4d2f-8b20-000000000004",
+      "name": "Triage and ingest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 0]
+    }
+  ],
+  "connections": {
+    "Run manually": { "main": [[{ "node": "Read arXiv cs.MA", "type": "main", "index": 0 }]] },
+    "Read arXiv cs.MA": { "main": [[{ "node": "Map to ingest contract", "type": "main", "index": 0 }]] },
+    "Map to ingest contract": { "main": [[{ "node": "Triage and ingest", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

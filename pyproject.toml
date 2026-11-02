@@ -1,0 +1,19 @@
+[project]
+name = "lumina-os-demo"
+version = "0.1.0"
+description = "Demo of Lumina OS: n8n orchestration, an MCP server and a self-updating knowledge base."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Katel Tindjou (Karter)" }]
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.2,<2"]
+
+[project.scripts]
+lumina = "lumina.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["lumina"]
