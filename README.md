@@ -3,6 +3,7 @@
 Lumina OS is a self-hosted, multi-agent AI operating layer I built to run my own operations.
 n8n orchestrates scheduled work, agents share one knowledge base through an MCP server, and a router sends each LLM call to the cheapest model that can handle it.
 This repository is a runnable, sanitized demo of that architecture with synthetic data. It contains no production configuration.
+It is a minimal reference implementation of the core loop, written from scratch; the full Lumina OS dashboard (cost and cache tracking, skills catalog, integrations) is shown in live demos on request.
 
 ## Architecture
 
